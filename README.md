@@ -35,4 +35,5 @@
 29. 按下i進入編輯模式後找到bind-address = 127.0.0.1，把127.0.0.1改成伺服器的私有IPv4後，按下ESC離開編輯模式並按下:和輸入wq儲存並離開。
 30. 輸入sudo service mysql restart重啟資料庫。
 31. 使用DBeaver或者Navicat等資料庫管理軟體來連接資料庫，如果成功就表示設定成功了。
+32. 使用指令sudo chown ubuntu:ubuntu -R /var/www/html來修改/var/www/html的擁有權限，從root改成ubuntu這樣一來檔案就可以使用ftp軟體上傳到html資料夾了。
 以上就是部署資料庫的流程。
