@@ -14,26 +14,24 @@
 8. 打開終端機輸入chmod 0400 貼上複製的路徑後執行。
 9. 在終端機輸入ssh -i 貼上複製的路徑 ubuntu@伺服器的公有IPv4地址後執行。
 10. 登入成功後輸入sudo apt update && sudo apt upgrade && sudo apt dist-upgrade把版本升級到最新版。
-11. 安裝taskel，輸入sudo apt install taskel
-12. 安裝Lamp server，輸入sudo apt install lamp-server
-13. 安裝phpmyadmin，輸入sudo apt install phpmyadmin
-14. 設定mysql帳號，輸入sudo mysql -u root mysql
-15. 進入mysql後輸入UPDATE user SET plugin='mysql_native_password' WHERE User='root';
-16. 輸入FLUSH PRIVILEGES;
-17. 輸入exit;離開mysql
-18. 設定mysql密碼，輸入sudo mysql_secure_installation
-19. 密碼強度選擇，如果沒有特殊需求的話輸入0即可，後續的全部輸入yes，等出現All Done就表示完成了。
-20. 打開瀏覽器並在網址列輸入伺服器的公有IPv4/phpmyadmin
-21. 如果出現錯誤訊息如下：-NOT FOUND The requested URL /phpmyadmin was not found on this server. Apache/2.4.7 (Ubuntu) Server at localhost Port 80
-22. 輸入sudo vi /etc/apache2/apache2.conf
-23. 按下 i 進入編輯模式，來到最後一行並添加Include /etc/phpmyadmin/apache.conf，添加完成後按下ESC離開編輯模式，按下:並輸入wq來離開並儲存。
-24. 輸入sudo /etc/init.d/apache2 restart來重啟apache
-25. 再次執行步驟20應該就可以正常顯示phpmyadmin的畫面了
-26. 登入phpmyadmin後選擇使用者帳號，編輯root，進入編輯後選擇登入資訊。
-27. 在主機名稱那欄選擇任意主機，在密碼那欄選擇使用文字方塊，在後面輸入外部連結資料庫要用的密碼，密碼要包含大小寫，完成後點選執行，如果出現錯誤的話密碼再加上特殊服後應該就可以通過了。
-28. 回到終端機輸入，sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
-29. 按下i進入編輯模式後找到bind-address = 127.0.0.1，把127.0.0.1改成伺服器的私有IPv4後，按下ESC離開編輯模式並按下:和輸入wq儲存並離開。
-30. 輸入sudo service mysql restart重啟資料庫。
-31. 使用DBeaver或者Navicat等資料庫管理軟體來連接資料庫，如果成功就表示設定成功了。
-32. 使用指令sudo chown ubuntu:ubuntu -R /var/www/html來修改/var/www/html的擁有權限，從root改成ubuntu這樣一來檔案就可以使用ftp軟體上傳到html資料夾了。
+11. 安裝apache2，輸入sudo apt install apache2
+12. 確認apache2是否正常運行，輸入sudo systemctl status apache2
+13. 安裝php，輸入sudo apt install php7.4 php7.4-mysql php-common php7.4-cli php7.4-json php7.4-common php7.4-opcache libapache2-mod-php7.4
+14. 確認php安裝版本，輸入php --version
+15. 重新啟動apache，輸入sudo systemctl restart apache2
+16. 建立頁面，輸入echo '<?php phpinfo(); ?>' | sudo tee -a /var/www/html/phpinfo.php > /dev/null
+17. 在瀏覽器中輸入http://你的伺服器公開IP位置/phpinfo.php確認網頁是否順利執行。
+18. 確認完畢後需要刪除所建立的頁面的話，輸入sudo rm /var/www/html/phpinfo.php
+19. 安裝MariaDB資料庫，輸入sudo apt install mariadb-server mariadb-client
+20. 確認MariaDB安裝版本，輸入sudo systemctl status mariadb
+21. 輸入sudo mysql_secure_installation來進行資料庫的基本安全設定
+22. 第一個問題是詢問是否移除匿名登入的功能，建議移除
+23. 第二個問題是詢問是否禁用遠程root登入，建議保留
+24. 第三問題是詢問是否移除test資料庫，建議移除
+25. 第四個問題是詢問是否將以上修改保存，選擇Ｙ
+26. 設定遠端連入資料庫I，輸入cd /etc/mysql/mariadb.conf.d，輸入sudo vi 50-server.cnf，找到bind-address 127.0.0.1這一行，在前面加上#後儲存並離開。 
+27. 設定遠端連入資料庫II，輸入sudo mysql -u root -p，再輸入密碼後輸入grant all privileges on *.* to 'root'@'%' identified by 'password' with grant option;
+28. 設定遠端連入資料庫III，password要使用跟登入資料庫一樣的密碼才行，之後輸入flush privileges;再輸入shutdown -r now來重新開機。
+29. 使用DBeaver或者Navicat等資料庫管理軟體來連接資料庫，如果成功就表示設定成功了。
+30. 使用指令sudo chown ubuntu:ubuntu -R /var/www/html來修改/var/www/html的擁有權限，從root改成ubuntu這樣一來檔案就可以使用ftp軟體上傳到html資料夾了。
 以上就是部署資料庫的流程。
