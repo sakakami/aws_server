@@ -34,4 +34,5 @@
 28. 設定遠端連入資料庫III，password要使用跟登入資料庫一樣的密碼才行，之後輸入flush privileges;再輸入shutdown -r now來重新開機。
 29. 使用DBeaver或者Navicat等資料庫管理軟體來連接資料庫，如果成功就表示設定成功了。
 30. 使用指令sudo chown ubuntu:ubuntu -R /var/www/html來修改/var/www/html的擁有權限，從root改成ubuntu這樣一來檔案就可以使用ftp軟體上傳到html資料夾了。
+31. 使用指令sudo chmod -R 755 /var/www修改資料夾權限，讓ftp軟體可以上傳檔案到資料夾（第二次使用這個方式，上面的方式是第一次建立的時候使用的）
 以上就是部署資料庫的流程。
